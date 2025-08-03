@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Opportunities for Youths</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>  
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" 
+    rel = "stylesheet" 
+  />
+</head>
+<body>
+
+  
+  <div class="title-container">
+    <!-- Title and description-->
+    <h1>Opportunities for Youth</h1>
+    <h3> A Hub for Passion-Driven and Growth-Minded Teens to Level Up</h3>
+
+  <div class="parent-container">
+    <div class="form-container">
+      <h2>Post an Opportunity</h2>
+
+      <form id="post-opportunity-form">
+
+          <!--Enter the Title of the Opportunity-->
+          <div class="form-group">
+              <label for="opportunity-title"></label>
+              <input type="text" id="opportunity-title" placeholder="Enter opportunity title..." required>
+          </div>
+
+          <!--Input bos to enter description of the opportunity-->
+          <div class="form-group">
+              <label for="Description"></label>
+              <input type="text" id="description" placeholder="Enter Description..." required>
+          </div>
+
+          <!-- Input box to enter dste of this opportunity-->
+          <div class ="form-group">
+            <label for="start-date"></label>
+            <input type="date" id="start-date" placeholder="Opportunity Start Date" required>
+          </div>
+
+          <div class="form-group">
+            <label for="category">Category</label>
+            <select id="category" placeholder="Select Category" multiple required>
+              <option value="">-- Select a category --</option>
+              <option value="all">All</option>
+              <option value="Computer-Science">Computer Science</option>
+              <option value="Art">Art</option>
+              <option value="Engineering">Engineering</option>
+              <option value="Science">Science</option>
+              <option value="Math">Math</option>
+              <option value="History">History</option>
+              <option value="Psychology">Psychology</option>
+              <option value="Literature&Writing">Literature & Writing</option>
+              <option value="Research">Research</option>
+              <option value="Volunteering">Volunteering</option>
+              <option value="Internship">Internship</option>
+              <option value="Competition">Competition</option>
+              <option value="Workshop">Workshop</option>
+              <option value="Scholarship">Scholarship</option>
+            </select>
+            <script>
+              const categorySelect = new Choices('#category', {
+                removeItemButton: true,
+                placeholderValue: 'Select categories',
+                searchEnabled: false,
+                shouldSort: false
+              });
+            </script>
+          </div>
+          <!--Button to submit transaction-->
+          <button type = "submit">Post Opportunity</button>
+      </form>
+    </div>
+
+
+      <!--Container with content to find an opportunity-->
+    <div class="find-opportunity-container">
+      <h2>Find an Opportunity</h2>
+      <div class="form-group">
+        <label for="category2">Category</label>
+        <select id="category2" placeholder="Select Category" multiple required>
+          <option value="all">All</option>
+          <option value="Computer-Science">Computer Science</option>
+          <option value="Art">Art</option>
+          <option value="Engineering">Engineering</option>
+          <option value="Science">Science</option>
+          <option value="Math">Math</option>
+          <option value="History">History</option>
+          <option value="Psychology">Psychology</option>
+          <option value="Literature&Writing">Literature & Writing</option>
+          <option value="Research">Research</option>
+          <option value="Volunteering">Volunteering</option>
+          <option value="Internship">Internship</option>
+          <option value="Competition">Competition</option>
+          <option value="Workshop">Workshop</option>
+          <option value="Scholarship">Scholarship</option>
+        </select>
+        <script>
+            const category2Select = new Choices('#category2', {
+              removeItemButton: true,
+              placeholderValue: 'Select categories',
+              searchEnabled: false,
+              shouldSort: true
+            });
+        </script>
+          
+          <!--Unordered list of opportunities with jinja template-->
+        <div class="opportunity_list-container"> 
+            <h4>Opportunities</h4>
+            <ul id="opportunity-list">
+              {% for opp in opportunities %}
+                <li>
+                  <strong>{{ opp.title }}</strong><br>
+                  <small>{{ opp.description }}</small><br>
+                  <small>Date: {{ opp.date }}</small><br>
+                  <form action="/register/{{ opp.id }}" method="post" style="display: inline;">
+                    <button type="submit">Register</button>
+                  </form>
+                </li>
+              {% endfor %}
+            </ul>            
+        </div>
+      </div>
+    </div>
+
+        <!--CONTAINER TO SHOWCASE REGISTERED OPPORTUNITIES-->
+      <div class="registered-opportunities">
+          <h2>Registered Opportunities</h2>
+          <ul id="registered-opportunity-list">
+            <!--  REGISTERED OPPORTUNITIES WILL BE INSERTED HERE-->
+        </ul>
+      </div>
+  </div>
+  </div>
+</body>
+</html>
