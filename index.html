@@ -6,18 +6,17 @@
   <title>Opportunities for Youths</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>  
-  <link 
-    href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" 
-    rel = "stylesheet" 
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+    rel = "stylesheet"
   />
 </head>
 <body>
 
-  
+
   <div class="title-container">
-    <!-- Title and description-->
-    <h1>Opportunities for Youth</h1>
+    <h1>Opportunities for Youths</h1>
     <h3> A Hub for Passion-Driven and Growth-Minded Teens to Level Up</h3>
 
   <div class="parent-container">
@@ -26,19 +25,16 @@
 
       <form id="post-opportunity-form">
 
-          <!--Enter the Title of the Opportunity-->
           <div class="form-group">
               <label for="opportunity-title"></label>
               <input type="text" id="opportunity-title" placeholder="Enter opportunity title..." required>
           </div>
 
-          <!--Input bos to enter description of the opportunity-->
           <div class="form-group">
               <label for="Description"></label>
               <input type="text" id="description" placeholder="Enter Description..." required>
           </div>
 
-          <!-- Input box to enter dste of this opportunity-->
           <div class ="form-group">
             <label for="start-date"></label>
             <input type="date" id="start-date" placeholder="Opportunity Start Date" required>
@@ -48,7 +44,7 @@
             <label for="category">Category</label>
             <select id="category" placeholder="Select Category" multiple required>
               <option value="">-- Select a category --</option>
-              <option value="all">All</option>
+              <option value="All">All</option>
               <option value="Computer-Science">Computer Science</option>
               <option value="Art">Art</option>
               <option value="Engineering">Engineering</option>
@@ -64,28 +60,18 @@
               <option value="Workshop">Workshop</option>
               <option value="Scholarship">Scholarship</option>
             </select>
-            <script>
-              const categorySelect = new Choices('#category', {
-                removeItemButton: true,
-                placeholderValue: 'Select categories',
-                searchEnabled: false,
-                shouldSort: false
-              });
-            </script>
           </div>
-          <!--Button to submit transaction-->
-          <button type = "submit">Post Opportunity</button>
+          <button type = "submit" id="postOpportunityBtn">Post Opportunity</button>
       </form>
     </div>
 
 
-      <!--Container with content to find an opportunity-->
     <div class="find-opportunity-container">
       <h2>Find an Opportunity</h2>
       <div class="form-group">
-        <label for="category2">Category</label>
-        <select id="category2" placeholder="Select Category" multiple required>
-          <option value="all">All</option>
+        <label for="filter-category">Filter by Category</label>
+        <select id="filter-category" placeholder="Select Category" multiple>
+          <option value="All">All</option>
           <option value="Computer-Science">Computer Science</option>
           <option value="Art">Art</option>
           <option value="Engineering">Engineering</option>
@@ -101,42 +87,185 @@
           <option value="Workshop">Workshop</option>
           <option value="Scholarship">Scholarship</option>
         </select>
-        <script>
-            const category2Select = new Choices('#category2', {
-              removeItemButton: true,
-              placeholderValue: 'Select categories',
-              searchEnabled: false,
-              shouldSort: true
-            });
-        </script>
-          
-          <!--Unordered list of opportunities with jinja template-->
-        <div class="opportunity_list-container"> 
+
+        <div class="opportunity_list-container">
             <h4>Opportunities</h4>
             <ul id="opportunity-list">
-              {% for opp in opportunities %}
-                <li>
-                  <strong>{{ opp.title }}</strong><br>
-                  <small>{{ opp.description }}</small><br>
-                  <small>Date: {{ opp.date }}</small><br>
-                  <form action="/register/{{ opp.id }}" method="post" style="display: inline;">
-                    <button type="submit">Register</button>
-                  </form>
-                </li>
-              {% endfor %}
-            </ul>            
+            </ul>
         </div>
       </div>
     </div>
 
-        <!--CONTAINER TO SHOWCASE REGISTERED OPPORTUNITIES-->
       <div class="registered-opportunities">
           <h2>Registered Opportunities</h2>
           <ul id="registered-opportunity-list">
-            <!--  REGISTERED OPPORTUNITIES WILL BE INSERTED HERE-->
         </ul>
       </div>
   </div>
   </div>
 </body>
 </html>
+
+<script>
+  const form = document.getElementById('post-opportunity-form');
+  const titleInput = document.getElementById('opportunity-title');
+  const descriptionInput = document.getElementById('description');
+  const dateInput = document.getElementById('start-date');
+  const opportunityList = document.getElementById('opportunity-list');
+  const registeredOpportunityList = document.getElementById('registered-opportunity-list'); 
+
+  const postCategoryChoices = new Choices('#category', {
+    removeItemButton: true,
+    placeholderValue: 'Select categories',
+    searchEnabled: false,
+    shouldSort: false
+  });
+
+  const filterCategoryChoices = new Choices('#filter-category', {
+    removeItemButton: true,
+    placeholderValue: 'Filter categories',
+    searchEnabled: false,
+    shouldSort: true
+  });
+
+  const AllStorage = 'formDataArray';
+  const RegisteredStorage = 'registeredOpportunities'; 
+
+  function getAllOpportunities() {
+    try {
+      const storedData = localStorage.getItem(AllStorage);
+      return storedData ? JSON.parse(storedData) : [];
+    } catch (error) {
+      console.error('Error retrieving all opportunities from localStorage:', error);
+      return [];
+    }
+  }
+
+  function SaveAllOpportinites(data) {
+    try {
+      localStorage.setItem(AllStorage, JSON.stringify(data));
+    } catch (error) {
+      console.error('Error saving all opportunities to localStorage:', error);
+    }
+  }
+
+  function GetRegisteredOpportunites() {
+    try {
+      const storedData = localStorage.getItem(RegisteredStorage);
+      return storedData ? JSON.parse(storedData) : [];
+    } catch (error) {
+      console.error('Error retrieving registered opportunities from localStorage:', error);
+      return [];
+    }
+  }
+
+  function SaveRegisteredOpportunites(data) {
+    try {
+      localStorage.setItem(RegisteredStorage, JSON.stringify(data));
+    } catch (error) {
+      console.error('Error saving registered opportunities to localStorage:', error);
+    }
+  }
+
+  function renderOpportunityList(data, targetListElement, showRegisterButton = true) {
+    targetListElement.innerHTML = '';
+
+    if (data.length === 0) {
+      targetListElement.innerHTML = '<p class="text-gray-500">No opportunities yet.</p>';
+      return;
+    }
+
+    data.forEach((item, index) => {
+      const itemElement = document.createElement('li');
+      itemElement.dataset.index = index; 
+      itemElement.innerHTML = `
+        <strong>${item.title}</strong><br>
+        <small>${item.description}</small><br>
+        <small>Date: ${item.date}</small><br>
+        <small>Category: ${item.category}</small><br>
+        ${showRegisterButton ? '<button type="button" class="register-btn">Register</button>' : ''}
+      `;
+      targetListElement.appendChild(itemElement);
+    });
+  }
+
+  function handleFormSubmit(event) {
+    event.preventDefault();
+
+    const Catogories = postCategoryChoices.getValue(true).map(choice => choice).join(', ');
+
+    const newItem = {
+      title: titleInput.value,
+      description: descriptionInput.value,
+      date: dateInput.value,
+      category: Catogories,
+      id: Date.now() 
+    };
+
+    const allOpportunities = getAllOpportunities();
+    allOpportunities.push(newItem);
+    SaveAllOpportinites(allOpportunities);
+
+    
+    applyFilter(); 
+    renderRegisteredOpportunities(); 
+
+    form.reset();
+    postCategoryChoices.setChoiceByValue('');
+  }
+
+  function applyFilter() {
+    const allOpportunities = getAllOpportunities();
+    const FilterCategories = filterCategoryChoices.getValue(true).map(choice => choice);
+
+    let filteredOpportunities = [];
+
+    if (FilterCategories.includes('All') || FilterCategories.length === 0) {
+      filteredOpportunities = allOpportunities;
+    } else {
+      filteredOpportunities = allOpportunities.filter(opportunity => {
+        const opportunityCategories = opportunity.category.split(', ').map(cat => cat.trim());
+        return FilterCategories.some(filterCat => opportunityCategories.includes(filterCat));
+      });
+    }
+
+    renderOpportunityList(filteredOpportunities, opportunityList, true); 
+  }
+
+  function renderRegisteredOpportunities() {
+    const registeredOpportunities = GetRegisteredOpportunites();
+    renderOpportunityList(registeredOpportunities, registeredOpportunityList, false); 
+  }
+
+
+  function Register(event) {
+    if (event.target.classList.contains('register-btn')) {
+      const listItem = event.target.closest('li');
+      if (listItem) {
+        const title = listItem.querySelector('strong').textContent;
+
+        const allOpportunities = getAllOpportunities();
+        const registeredOpportunities = GetRegisteredOpportunites();
+
+        const opportunityToRegister = allOpportunities.find(opp => opp.title === title); 
+
+        if (opportunityToRegister) {
+          const alreadyRegistered = registeredOpportunities.some(regOpp => regOpp.id === opportunityToRegister.id);
+
+          if (!alreadyRegistered) {
+            registeredOpportunities.push(opportunityToRegister);
+            SaveRegisteredOpportunites(registeredOpportunities);
+            renderRegisteredOpportunities(); 
+          } 
+        }
+      }
+    }
+  }
+  window.onload = function() {
+    form.addEventListener('submit', handleFormSubmit);
+    applyFilter(); 
+    renderRegisteredOpportunities(); 
+    filterCategoryChoices.passedElement.element.addEventListener('change', applyFilter);
+    opportunityList.addEventListener('click', Register);
+  };
+</script>
