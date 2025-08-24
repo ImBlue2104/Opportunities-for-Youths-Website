@@ -1,5 +1,5 @@
 This is a web application for teens to find various types of opportunities the are interested in.
-This web app is built using HTML, CSS, and JavaScript. Javascript code is on the HTML file.
+This web app is built using HTML, CSS, and JavaScript.
 
 Features:
   1. You can post opportunities by filling the form out at the top.
